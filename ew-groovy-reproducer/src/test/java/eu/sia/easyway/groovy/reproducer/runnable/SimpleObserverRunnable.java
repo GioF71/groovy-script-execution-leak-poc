@@ -1,5 +1,7 @@
 package eu.sia.easyway.groovy.reproducer.runnable;
 
+import eu.sia.easyway.groovy.reproducer.observation.Observer;
+
 public class SimpleObserverRunnable implements Runnable {
 
 	private final Observer observer;

@@ -14,8 +14,14 @@ public class SimpleLoopRunner implements Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
-			runnable.run();
+		boolean failed = false;
+		while (!failed) {
+			try {
+				runnable.run();
+			} catch (Exception exc) {
+				failed = true;
+				exc.printStackTrace();
+			}
 			try {
 				Thread.sleep(delayMillisec, delayNanoSec);
 			} catch (InterruptedException e) {
