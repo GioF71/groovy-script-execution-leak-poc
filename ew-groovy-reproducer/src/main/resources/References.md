@@ -1,14 +1,22 @@
-# References
+## Groovy Issue reproducer
 
-## Disable compressed class pointers
-<https://stackoverflow.com/questions/39491325/understanding-metaspace-size>
+## Scope
+TODO Add a brief description  
 
-## Tuning Java heap size, metaspace size and other such items
-<https://cf-docs.jp-east-1.paas.cloud.global.fujitsu.com/en/manual/overview/overview/topics/t-fjbp-tuning.html>
+## Runner types
+	Runner type #1 to be described
+	Runner type #2 to be described
+	Runner type #3 to be described
+	Runner type #4 to be described
+	...
 
-## Launch Options
-	-XX:MaxMetaspaceSize=50M 
-	-XX:-UseCompressedClassPointers
-	-Xloggc:gclog.log 
-	-XX:+PrintGCDetails 
-	-XX:+PrintGCDateStamps
+## Usage	
+TODO Add a brief description  
+
+## Results
+
+### With caching
+TODO Add a brief description  
+
+### Without caching
+TODO Add a brief description  
