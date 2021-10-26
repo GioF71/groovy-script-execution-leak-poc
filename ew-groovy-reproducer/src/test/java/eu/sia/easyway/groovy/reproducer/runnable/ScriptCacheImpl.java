@@ -1,6 +1,7 @@
 package eu.sia.easyway.groovy.reproducer.runnable;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +33,12 @@ public class ScriptCacheImpl implements ScriptCache {
 	@Override
 	public Script getCompiled(String scriptText) {
 		try {
-			return scriptCache.get(scriptText);
+			return scriptCache.get(scriptText, new Callable<Script>() {
+
+				@Override
+				public Script call() throws Exception {
+					return compile(scriptText);
+				}});
 		} catch (ExecutionException e) {
 			throw new RuntimeException(e);
 		}
