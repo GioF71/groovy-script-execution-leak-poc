@@ -4,6 +4,7 @@
 **/.project
 **/.settings/*
 **/target
+**/.factorypath
 
 # Log file
 *.log
