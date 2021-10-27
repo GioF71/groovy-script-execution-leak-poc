@@ -45,7 +45,7 @@ public class ScriptStressTest {
 
 		@Override
 		public void onStatistic(Statistic statistic) {
-			StringJoiner stringJoiner = new StringJoiner("}; {", "{", "}");
+			StringJoiner stringJoiner = new StringJoiner("} {", "{", "}");
 			for (StatisticEntry entry : statistic) {
 				stringJoiner.add(String.format("Name [%s] Cnt [%d] Avg [%.3f] Min [%.3f] Max [%.3f]",
 					entry.getName(), 
