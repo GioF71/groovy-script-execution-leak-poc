@@ -38,7 +38,10 @@ public class ScriptStressTest {
 		stats.add(new ObservedInterval("S01", Double.valueOf(1.0d)));
 		stats.add(new ObservedInterval("S05", Double.valueOf(5.0d)));
 		stats.add(new ObservedInterval("S10", Double.valueOf(10.0d)));
-		Runnable loopRunner = new SimpleLoopRunner(new ObserverRunnable(observer, stats), 1000L, 0);
+		Runnable loopRunner = new SimpleLoopRunner(
+			new ObserverRunnable(observer, stats), 
+			TimeUnit.MILLISECONDS, 
+			1000);
 		Thread obsThread = new Thread(loopRunner);
 		obsThread.start();
 		for (int i = 0; i < numberOfThreads; ++i) {
@@ -52,7 +55,7 @@ public class ScriptStressTest {
 				new ScriptRandomizerImpl(1000), 
 				new ScriptCacheImpl(1000, 30)));
 
-			Thread t = new Thread(new SimpleLoopRunner(r1, 0L, 500000));
+			Thread t = new Thread(new SimpleLoopRunner(r1, TimeUnit.MICROSECONDS, 500));
 			threads.add(t);
 			t.start();
 		}

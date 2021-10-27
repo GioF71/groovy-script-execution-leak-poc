@@ -1,15 +1,17 @@
 package eu.sia.easyway.groovy.reproducer;
 
+import java.util.concurrent.TimeUnit;
+
 public class SimpleLoopRunner implements Runnable {
 	
 	private final Runnable runnable;
-	private final long delayMillisec;
-	private final int delayNanoSec;
+	private final TimeUnit delayTimeUnit;
+	private final long delay;
 
-	SimpleLoopRunner(Runnable runnable, long delayMillisec, int delayNanoSec) {
+	SimpleLoopRunner(Runnable runnable, TimeUnit delayTimeUnit, long delay) {
 		this.runnable = runnable;
-		this.delayMillisec = delayMillisec;
-		this.delayNanoSec = delayNanoSec;
+		this.delayTimeUnit = delayTimeUnit;
+		this.delay = delay;
 	}
 
 	@Override
@@ -23,7 +25,8 @@ public class SimpleLoopRunner implements Runnable {
 				exc.printStackTrace();
 			}
 			try {
-				Thread.sleep(delayMillisec, delayNanoSec);
+				long delayNanoSec = delayTimeUnit.toNanos(delay);
+				Thread.sleep(delayNanoSec / 1000000L, (int) (delayNanoSec % 1000000L));
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
