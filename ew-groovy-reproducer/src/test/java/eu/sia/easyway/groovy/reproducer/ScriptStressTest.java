@@ -29,8 +29,7 @@ public class ScriptStressTest {
 	@Test
 	public void t0() throws InterruptedException {
 		int numberOfThreads = Integer.parseInt(System.getenv().getOrDefault("NUMBER_OF_THREADS", "4"));
-		// test length not enforced yet
-		int testLengthSec = Integer.parseInt(System.getenv().getOrDefault("TEST_LENGTH_SEC", "10"));
+		int durationSec = Integer.parseInt(System.getenv().getOrDefault("DURATION_SEC", "10"));
 		List<Thread> threads = new ArrayList<>();
 		GroovyClassLoader gcl = new GroovyClassLoader();
 		Observer observer = new ObserverImpl();
@@ -58,14 +57,19 @@ public class ScriptStressTest {
 			t.start();
 		}
 		for (Thread t : threads) {
-			doJoin(t, testLengthSec);
+			doJoin(t, durationSec);
 		}
-		doJoin(obsThread, testLengthSec + 1);
+		// calculating observer duration
+		int obsDurationSec = 
+			(durationSec == -1) 
+				? -1
+				: durationSec + 1;
+		doJoin(obsThread, obsDurationSec);
 	}
 	
-	private void doJoin(Thread t, int testLengthSec) throws InterruptedException {
-		if (testLengthSec > 0) {
-			t.join(TimeUnit.SECONDS.toMillis(testLengthSec + 1));
+	private void doJoin(Thread t, int durationSec) throws InterruptedException {
+		if (durationSec > 0) {
+			t.join(TimeUnit.SECONDS.toMillis(durationSec + 1));
 		} else {
 			t.join();
 		}
