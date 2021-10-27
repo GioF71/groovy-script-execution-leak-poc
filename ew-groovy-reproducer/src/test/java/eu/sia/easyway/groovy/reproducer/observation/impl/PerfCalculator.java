@@ -1,4 +1,6 @@
-package eu.sia.easyway.groovy.reproducer.observation;
+package eu.sia.easyway.groovy.reproducer.observation.impl;
+
+import eu.sia.easyway.groovy.reproducer.observation.StatisticEntry;
 
 class PerfCalculator {
 
@@ -54,5 +56,9 @@ class PerfCalculator {
 
 	double getAvg() {
 		return sumSec / ((double) count);
+	}
+	
+	StatisticEntry getStatisticEntry() {
+		return new StatisticEntry(getName(), getCount(), getAvg(), getMinSec(), getMaxSec());
 	}
 }

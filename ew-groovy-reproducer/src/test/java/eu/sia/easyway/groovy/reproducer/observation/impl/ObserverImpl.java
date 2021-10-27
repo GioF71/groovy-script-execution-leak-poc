@@ -1,9 +1,10 @@
-package eu.sia.easyway.groovy.reproducer.observation;
+package eu.sia.easyway.groovy.reproducer.observation.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import eu.sia.easyway.groovy.reproducer.observation.Observer;
 import eu.sia.easyway.groovy.reproducer.stat.Metric;
 
 public class ObserverImpl implements Observer {

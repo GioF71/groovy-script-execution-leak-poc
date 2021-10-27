@@ -1,4 +1,4 @@
-package eu.sia.easyway.groovy.reproducer.observation;
+package eu.sia.easyway.groovy.reproducer.observation.impl;
 
 import java.util.Comparator;
 
