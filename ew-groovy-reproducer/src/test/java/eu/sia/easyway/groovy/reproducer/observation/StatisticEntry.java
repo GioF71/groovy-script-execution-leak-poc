@@ -13,11 +13,11 @@ public final class StatisticEntry {
 	private final int count;
 	
 	@Getter
-	private final Double avg;
+	private final Double avgSec;
 	
 	@Getter
-	private final Double min;
+	private final Double minSec;
 	
 	@Getter
-	private final Double max;
+	private final Double maxSec;
 }

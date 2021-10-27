@@ -50,9 +50,9 @@ public class ScriptStressTest {
 				stringJoiner.add(String.format("Name [%s] Cnt [%d] Avg [%.3f] Min [%.3f] Max [%.3f]",
 					entry.getName(), 
 					entry.getCount(), 
-					toMilli(getAvg(entry)),
-					toMilli(entry.getMin()), 
-					toMilli(entry.getMax())));
+					toMilli(getAvgMilliSec(entry)),
+					toMilli(entry.getMinSec()), 
+					toMilli(entry.getMaxSec())));
 			}
 			System.out.println(stringJoiner.toString());
 		}
@@ -61,13 +61,12 @@ public class ScriptStressTest {
 			return Optional.ofNullable(valueSec).map(v -> (v.doubleValue() * (1000.0f))).orElse(null);
 		}
 
-		private Double getAvg(StatisticEntry p) {
+		private Double getAvgMilliSec(StatisticEntry p) {
 			if (p.getCount() > 0) {
-				return toMilli(p.getAvg());
+				return toMilli(p.getAvgSec());
 			}
 			return null;
 		}
-	
 	}
 	
 	@Test
