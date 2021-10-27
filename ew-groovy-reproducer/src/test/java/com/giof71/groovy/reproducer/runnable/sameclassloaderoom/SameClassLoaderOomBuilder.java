@@ -5,13 +5,13 @@ import com.giof71.groovy.reproducer.RunnerType;
 
 import groovy.lang.GroovyClassLoader;
 
-public class SameClassLoaderOoomBuilder implements RunnerBuilder {
+public class SameClassLoaderOomBuilder implements RunnerBuilder {
 	
 	private GroovyClassLoader classLoader = new GroovyClassLoader();
 
 	@Override
 	public RunnerType getRunnerType() {
-		return RunnerType.RANDOM_SCRIPT;
+		return RunnerType.SAME_CLASSLOADER_OOM;
 	}
 
 	@Override

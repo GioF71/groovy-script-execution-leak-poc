@@ -7,18 +7,22 @@ import java.util.Optional;
 import com.giof71.groovy.reproducer.RunnerBuilder;
 import com.giof71.groovy.reproducer.RunnerFactory;
 import com.giof71.groovy.reproducer.RunnerType;
+import com.giof71.groovy.reproducer.runnable.one.OneClassLoaderOneScriptRunnerBuilder;
 import com.giof71.groovy.reproducer.runnable.random.RandomScriptRunnerBuilder;
 import com.giof71.groovy.reproducer.runnable.randomcached.RandomCachedScriptRunnerBuilder;
-import com.giof71.groovy.reproducer.runnable.sameclassloaderoom.SameClassLoaderOoomBuilder;
+import com.giof71.groovy.reproducer.runnable.sameclassloaderoom.SameClassLoaderOomBuilder;
+import com.giof71.groovy.reproducer.runnable.samerecompiled.SameRecompiledRunnerBuilder;
 
 public class RunnerFactoryImpl implements RunnerFactory {
 	
 	private final Map<RunnerType, RunnerBuilder> map = new HashMap<>();
 	
 	public RunnerFactoryImpl() {
-		map.put(RunnerType.RANDOM_SCRIPT, new RandomScriptRunnerBuilder());
+		map.put(RunnerType.RANDOM, new RandomScriptRunnerBuilder());
 		map.put(RunnerType.RANDOM_CACHED, new RandomCachedScriptRunnerBuilder());
-		map.put(RunnerType.SAME_CLASSLOADER_OOM, new SameClassLoaderOoomBuilder());
+		map.put(RunnerType.SAME_CLASSLOADER_OOM, new SameClassLoaderOomBuilder());
+		map.put(RunnerType.ONE_CLASSLOADER, new OneClassLoaderOneScriptRunnerBuilder());
+		map.put(RunnerType.SAME_RECOMPILED, new SameRecompiledRunnerBuilder());
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package com.giof71.groovy.reproducer;
 
 import java.util.concurrent.TimeUnit;
 
-public class SimpleLoopRunner implements Runnable {
+class SimpleLoopRunner implements Runnable {
 	
 	private final Runnable runnable;
 

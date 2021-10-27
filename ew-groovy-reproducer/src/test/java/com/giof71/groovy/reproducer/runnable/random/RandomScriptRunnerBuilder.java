@@ -7,7 +7,7 @@ public class RandomScriptRunnerBuilder implements RunnerBuilder {
 
 	@Override
 	public RunnerType getRunnerType() {
-		return RunnerType.RANDOM_SCRIPT;
+		return RunnerType.RANDOM;
 	}
 
 	@Override
