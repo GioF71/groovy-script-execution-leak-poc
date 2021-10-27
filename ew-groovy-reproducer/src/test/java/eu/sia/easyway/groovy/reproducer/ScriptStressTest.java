@@ -36,13 +36,14 @@ public class ScriptStressTest {
 		Observer observer = new ObserverImpl();
 		List<ObservedInterval> stats = new ArrayList<>();
 		stats.add(new ObservedInterval("S01", Double.valueOf(1.0d)));
-		stats.add(new ObservedInterval("S05", Double.valueOf(5.0d)));
+		stats.add(new ObservedInterval("S03", Double.valueOf(3.0d)));
+		stats.add(new ObservedInterval("S05", Double.valueOf(6.0d)));
 		stats.add(new ObservedInterval("S10", Double.valueOf(10.0d)));
 		Runnable loopRunner = new SimpleLoopRunner(
 			new ObserverRunnable(observer, stats), 
 			TimeUnit.MILLISECONDS, 
 			1000,
-			calcObserverDuration(durationSec));
+			calcObserverDurationSec(durationSec));
 		Thread obsThread = new Thread(loopRunner);
 		obsThread.start();
 		for (int i = 0; i < numberOfThreads; ++i) {
@@ -55,30 +56,22 @@ public class ScriptStressTest {
 				new ScriptRandomizerImpl(1000), 
 				new ScriptCacheImpl(1000, 30)));
 			
-			Thread t = new Thread(new SimpleLoopRunner(r5, TimeUnit.MICROSECONDS, 500, durationSec));
+			Thread t = new Thread(
+				new SimpleLoopRunner(
+					r5, 
+					TimeUnit.MICROSECONDS, 
+					500, 
+					durationSec));
 			threads.add(t);
 			t.start();
 		}
 		for (Thread t : threads) {
-			doJoin(t, durationSec);
-		}
-		// calculating observer duration
-		int obsDurationSec = 
-			(durationSec == -1) 
-				? -1
-				: durationSec + 1;
-		doJoin(obsThread, obsDurationSec);
-	}
-	
-	private void doJoin(Thread t, int durationSec) throws InterruptedException {
-		if (durationSec > 0) {
-			t.join(TimeUnit.SECONDS.toMillis(durationSec));
-		} else {
 			t.join();
 		}
+		obsThread.join();
 	}
 	
-	private int calcObserverDuration(int testDuration) {
-		return testDuration < 0 ? -1 : testDuration + 1;
+	private int calcObserverDurationSec(int testDuration) {
+		return testDuration < 0 ? -1 : testDuration + 15;
 	}
 }

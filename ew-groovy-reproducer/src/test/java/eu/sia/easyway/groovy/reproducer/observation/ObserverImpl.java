@@ -19,10 +19,10 @@ public class ObserverImpl implements Observer {
 	}
 	
 	@Override
-	public List<Metric> getMetricList(double lastSec, boolean removeOlder) {
+	public List<Metric> getMetricList(double seconds, boolean removeOlder) {
 		List<Metric> list = new ArrayList<>();
 		long now = System.nanoTime();
-		long lowerLimit = removeOlder ? now - ((long) (lastSec * (1000000000.0f))) : -1;
+		long lowerLimit = removeOlder ? now - ((long) (seconds * (1000000000.0f))) : -1;
 		synchronized(entries) {
 			Iterator<Metric> it = entries.iterator();
 			while (it.hasNext()) {

@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-@Getter
 public class ObservedInterval {
+
+	@Getter
 	private final String name;
-	private final Double nSec;
+	
+	@Getter
+	private final Double numberOfSeconds;
 }

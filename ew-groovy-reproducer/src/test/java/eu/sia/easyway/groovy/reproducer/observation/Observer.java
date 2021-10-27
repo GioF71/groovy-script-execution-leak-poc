@@ -6,5 +6,5 @@ import eu.sia.easyway.groovy.reproducer.stat.Metric;
 
 public interface Observer {
 	void increment(long deltaNanoSec);
-	List<Metric> getMetricList(double lastSec, boolean removeOlder);
+	List<Metric> getMetricList(double seconds, boolean removeOlder);
 }
