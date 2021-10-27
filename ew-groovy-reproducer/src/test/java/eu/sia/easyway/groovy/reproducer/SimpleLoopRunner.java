@@ -9,16 +9,18 @@ public class SimpleLoopRunner implements Runnable {
 	private final long delayMilliSec;
 	private final int delayRemainingNanoSec;
 
-	private long durationNanoSec = 10L * 1000L * 1000L * 1000L; 
+	private final long durationNanoSec; 
 
 	SimpleLoopRunner(
 			Runnable runnable, 
 			TimeUnit delayTimeUnit, 
-			long delay) {
+			long delay,
+			int durationSec) {
 		this.runnable = runnable;
 		long delayNano = delayTimeUnit.toNanos(delay);
 		this.delayMilliSec = nanoToMilliSec(delayNano);
 		this.delayRemainingNanoSec = additionalNanoSec(delayNano);
+		this.durationNanoSec = durationSec == -1 ? -1 : (long) durationSec * 1000L * 1000L * 1000L;
 	}
 	
 	private long nanoToMilliSec(long nano) {
@@ -32,13 +34,15 @@ public class SimpleLoopRunner implements Runnable {
 	@Override
 	public void run() {
 		long start = System.nanoTime();
-		long limit = start + durationNanoSec;
+		Long limit = durationNanoSec == -1 ? null : start + durationNanoSec;
 		boolean failed = false;
 		boolean finished = false;
 		while (!failed && !finished) {
-			long now = System.nanoTime();
-			if (now > limit) {
-				finished = true;
+			if (limit != null) {
+				long now = System.nanoTime();
+				if (now > limit.longValue()) {
+					finished = true;
+				}
 			}
 			try {
 				runnable.run();
