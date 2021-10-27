@@ -5,19 +5,41 @@ import java.util.concurrent.TimeUnit;
 public class SimpleLoopRunner implements Runnable {
 	
 	private final Runnable runnable;
-	private final TimeUnit delayTimeUnit;
-	private final long delay;
 
-	SimpleLoopRunner(Runnable runnable, TimeUnit delayTimeUnit, long delay) {
+	private final long delayMilliSec;
+	private final int delayRemainingNanoSec;
+
+	private long durationNanoSec = 10L * 1000L * 1000L * 1000L; 
+
+	SimpleLoopRunner(
+			Runnable runnable, 
+			TimeUnit delayTimeUnit, 
+			long delay) {
 		this.runnable = runnable;
-		this.delayTimeUnit = delayTimeUnit;
-		this.delay = delay;
+		long delayNano = delayTimeUnit.toNanos(delay);
+		this.delayMilliSec = nanoToMilliSec(delayNano);
+		this.delayRemainingNanoSec = additionalNanoSec(delayNano);
+	}
+	
+	private long nanoToMilliSec(long nano) {
+		return nano / 1000000L;
+	}
+	
+	private int additionalNanoSec(long nano) {
+		return (int) (nano % 1000000L);
 	}
 
 	@Override
 	public void run() {
+		long start = System.nanoTime();
+		long limit = start + durationNanoSec;
 		boolean failed = false;
-		while (!failed) {
+		boolean finished = false;
+		while (!failed && !finished) {
+			long now = System.nanoTime();
+			if (now > limit) {
+				finished = true;
+			}
 			try {
 				runnable.run();
 			} catch (Exception exc) {
@@ -25,8 +47,7 @@ public class SimpleLoopRunner implements Runnable {
 				exc.printStackTrace();
 			}
 			try {
-				long delayNanoSec = delayTimeUnit.toNanos(delay);
-				Thread.sleep(delayNanoSec / 1000000L, (int) (delayNanoSec % 1000000L));
+				Thread.sleep(delayMilliSec, delayRemainingNanoSec);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
