@@ -107,6 +107,7 @@ public class ObserverRunnable implements Runnable {
 		// 10, 5, 1 sec
 		Double max = statListLowerToGreater.get(statListLowerToGreater.size() - 1).getNSec();
 		List<Metric> metricList = observer.getMetricList(max, true);
+		// TODO must sort in reverse!
 		metricList.sort(metricComparator);
 		Long lowestNano = metricList.size() > 0 ? metricList.get(0).getNanoTime() : null;
 		if (lowestNano != null) {
