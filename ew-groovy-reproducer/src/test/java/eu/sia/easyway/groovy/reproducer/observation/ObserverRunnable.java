@@ -26,8 +26,9 @@ public class ObserverRunnable implements Runnable {
 		double current = 0.0f;
 		for (ObservedInterval o : statListLowerToGreater) {
 			if (o == null || o.getNumberOfSeconds() == null || o.getNumberOfSeconds().doubleValue() < current) {
-				throw new RuntimeException("Sequence is not growing");
+				throw new RuntimeException("Sequence is not strictly increasing");
 			}
+			current = o.getNumberOfSeconds();
 		}
 		return statListLowerToGreater;
 	}
@@ -39,10 +40,9 @@ public class ObserverRunnable implements Runnable {
 		Double max = statListLowerToGreater.get(statListLowerToGreater.size() - 1).getNumberOfSeconds();
 		List<Metric> metricList = observer.getMetricList(max, true);
 		System.out.println(String.format("[%s] Metric count = %d", runId, metricList.size()));
-		
 		metricList.sort(new MetricComparator());
 		List<PerfCalculator> perfCalculatorList = new ArrayList<>();
-		//int lastUpperBound = -1;
+		int lastUpperBound = metricList.size();
 		for (int statIndex = 0; statIndex < statListLowerToGreater.size(); ++statIndex) {
 			//int upperBound = lastUpperBound == -1 ? metricList.size() : lastUpperBound;
 			ObservedInterval currentObserverInterval = statListLowerToGreater.get(statIndex);
@@ -54,22 +54,21 @@ public class ObserverRunnable implements Runnable {
 			if (lowerIndex < 0) {
 				lowerIndex = Math.abs(lowerIndex) - 1;
 			}
-//			PerfCalculator perfCalculator = perfCalculatorList.size() == 0 
-//					? new PerfCalculator(currentStatName)
-//					: new PerfCalculator(currentStatName, perfCalculatorList.get(perfCalculatorList.size() - 1));
-			PerfCalculator perfCalculator = new PerfCalculator(currentStatName);
-
-			int cycleUpperLimit = metricList.size(); // unoptimized
-					
-			//int cycleUpperLimit = Math.min(metricList.size(), metricList.size());
-			//int cycleUpperLimit = lastUpperBound == -1 ? metricList.size() : lastUpperBound;
-			System.out.println(String.format("[%s] [%s] Accumulating from index [%d] to limit [%d]", runId, currentStatName, lowerIndex, cycleUpperLimit));
-			//for (int i = lowerIndex; i < cycleUpperLimit; ++i) {
+			PerfCalculator perfCalculator = perfCalculatorList.size() == 0 
+					? new PerfCalculator(currentStatName)
+					: new PerfCalculator(currentStatName, perfCalculatorList.get(perfCalculatorList.size() - 1));
+			int cycleUpperLimit = lastUpperBound;
+			System.out.println(String.format("[%s] [%s] Accumulating range [%d,%d) over %s", 
+					runId, 
+					currentStatName, 
+					lowerIndex, 
+					cycleUpperLimit,
+					perfCalculatorList.size() == 0 ? "none" : "previous_stat"));
 			for (int i = lowerIndex; i < metricList.size(); ++i) {
 				perfCalculator.add(metricList.get(i).getDeltaNanosec());
 			}
 			perfCalculatorList.add(perfCalculator);
-			//lastUpperBound = lowerIndex;
+			lastUpperBound = lowerIndex;
 		}
 		print(perfCalculatorList);
 	}
