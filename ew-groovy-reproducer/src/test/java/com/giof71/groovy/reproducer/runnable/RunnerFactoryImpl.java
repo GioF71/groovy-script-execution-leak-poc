@@ -36,5 +36,4 @@ public class RunnerFactoryImpl implements RunnerFactory {
 					runnerType.name())));
 		return runnerBuilder.build();
 	}
-
 }

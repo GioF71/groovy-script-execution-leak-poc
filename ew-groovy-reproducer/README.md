@@ -12,3 +12,17 @@
 	-Xloggc:gclog.log 
 	-XX:+PrintGCDetails 
 	-XX:+PrintGCDateStamps
+	
+## Requirements
+	-JDK 8+
+
+## Run
+	-Set the RUNNER_TYPE environment variable to one of the values of the RunnerType enum (Optional)
+	-Execute with the following: mvn clean compile test
+	-The tests should run for a few seconds and then exits.
+	
+## Environment Variables
+	-RUNNER_TYPE (one among RunnerType)
+	-NUMBER_OF_THREADS
+	-DURATION_SEC
+	-STAT_DEBUG_ENABLED

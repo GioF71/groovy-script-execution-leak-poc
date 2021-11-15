@@ -18,5 +18,4 @@ public class RandomCachedScriptRunnerBuilder implements RunnerBuilder {
 			new ScriptRandomizerImpl(1000), 
 			new ScriptCacheImpl(1000, 30));
 	}
-
 }

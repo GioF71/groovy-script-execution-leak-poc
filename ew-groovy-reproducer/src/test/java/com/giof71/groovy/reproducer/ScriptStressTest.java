@@ -22,6 +22,26 @@ import com.giof71.groovy.reproducer.runnable.SimpleObserverRunnable;
 
 public class ScriptStressTest {
 	
+	@Test
+	public void testAll() throws Exception {
+		int nth = 1;
+		StressTestConfig config = new StressTestConfig(nth, 1, true);
+		for (RunnerType runnerType : RunnerType.values()) {
+			execRunnerTest(runnerType, config);
+			System.gc();
+		}
+	}
+	
+	@Test
+	public void t0() throws Exception {
+		int numberOfThreads = Integer.parseInt(System.getenv().getOrDefault("NUMBER_OF_THREADS", "4"));
+		int durationSec = Integer.parseInt(System.getenv().getOrDefault("DURATION_SEC", "1"));
+		boolean statDebugEnabled = Boolean.valueOf(System.getenv().getOrDefault("STAT_DEBUG_ENABLED", "false"));
+		StressTestConfig config = new StressTestConfig(numberOfThreads, durationSec, statDebugEnabled);
+		RunnerType runnerType = RunnerType.valueOf(System.getenv().getOrDefault("RUNNER_TYPE", "RANDOM_CACHED"));
+		execRunnerTest(runnerType, config);
+	}
+
 	private Runnable createWorkerRunnable(Observer observer, Runnable runnable) {
 		return new SimpleObserverRunnable(observer, runnable);
 	}
@@ -62,18 +82,15 @@ public class ScriptStressTest {
 		}
 	}
 	
-	@Test
-	public void t0() throws Exception {
+	private void execRunnerTest(RunnerType runnerType, StressTestConfig config) throws InterruptedException {
 		RunnerFactory runnerFactory = new RunnerFactoryImpl();
-		RunnerType runnerType = RunnerType.valueOf(System.getenv("RUNNER_TYPE"));
-		int numberOfThreads = Integer.parseInt(System.getenv().getOrDefault("NUMBER_OF_THREADS", "4"));
-		int durationSec = Integer.parseInt(System.getenv().getOrDefault("DURATION_SEC", "10"));
+		int durationSec = config.getDurationSec();
 		System.out.println(RunnerType.class.getSimpleName() + ": " + runnerType.name());
 		System.out.println("Test duration: " + durationSec);
 		List<Thread> threads = new ArrayList<>();
 		Observer observer = new ObserverImpl();
 		List<ObservedInterval> stats = createObservationIntervalList();
-		ObserverRunnable observerRunnable = createObserverRunnable(observer, stats);
+		ObserverRunnable observerRunnable = createObserverRunnable(observer, stats, config.isStatisticDebugEnabled());
 		Runnable observerLoopRunner = new SimpleLoopRunner(
 			observerRunnable, 
 			TimeUnit.MILLISECONDS, 
@@ -81,7 +98,7 @@ public class ScriptStressTest {
 			calcObserverDurationSec(durationSec));
 		Thread obsThread = new Thread(observerLoopRunner);
 		obsThread.start();
-		for (int i = 0; i < numberOfThreads; ++i) {
+		for (int i = 0; i < config.getNumberOfThreads(); ++i) {
 			Runnable runner = createWorkerRunnable(observer, runnerFactory.getRunner(runnerType));
 			Thread t = new Thread(
 				new SimpleLoopRunner(
@@ -100,8 +117,8 @@ public class ScriptStressTest {
 
 	private ObserverRunnable createObserverRunnable(
 			Observer observer, 
-			List<ObservedInterval> observedIntervalList) {
-		boolean statDebugEnabled = Boolean.valueOf(System.getenv().getOrDefault("STAT_DEBUG_ENABLED", "false"));
+			List<ObservedInterval> observedIntervalList,
+			boolean statDebugEnabled) {
 		ObserverRunnable observerRunnable = new ObserverRunnableImpl(observer, observedIntervalList);
 		observerRunnable.addStatisticListener(new StatisticListenerToConsole());
 		if (statDebugEnabled) {
@@ -119,6 +136,6 @@ public class ScriptStressTest {
 	}
 	
 	private int calcObserverDurationSec(int testDuration) {
-		return testDuration < 0 ? -1 : testDuration + 15;
+		return testDuration < 0 ? -1 : testDuration + 1;
 	}
 }
