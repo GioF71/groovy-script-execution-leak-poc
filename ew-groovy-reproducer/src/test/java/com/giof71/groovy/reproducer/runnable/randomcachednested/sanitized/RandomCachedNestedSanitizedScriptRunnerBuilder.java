@@ -29,7 +29,7 @@ public class RandomCachedNestedSanitizedScriptRunnerBuilder implements RunnerBui
 	public Runnable build() {
 		return new RandomCachedNestedSanitizedScriptRunner(
 			new ScriptRandomizerImpl(1000, scriptSupplier), 
-			new ScriptCacheImpl(1000, 1));
+			new ScriptCacheImpl(1050, 30));
 	}
 
 }
