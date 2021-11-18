@@ -5,7 +5,7 @@ import com.giof71.groovy.reproducer.RunnerType;
 
 import groovy.lang.GroovyClassLoader;
 
-public class SameClassLoaderOomRunnerBuilder implements RunnerBuilder {
+public class SameClassLoaderOomScriptRunnerBuilder implements RunnerBuilder {
 	
 	private GroovyClassLoader classLoader = new GroovyClassLoader();
 
