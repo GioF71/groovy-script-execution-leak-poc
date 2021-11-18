@@ -8,11 +8,11 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.Script;
 
-class SameClassLoaderOomScriptRunnerBuilder implements Runnable {
+class SameClassLoaderOomScriptRunner implements Runnable {
 	
 	private final GroovyClassLoader gcl;
 	
-	SameClassLoaderOomScriptRunnerBuilder(GroovyClassLoader gcl) {
+	SameClassLoaderOomScriptRunner(GroovyClassLoader gcl) {
 		this.gcl = gcl;
 	}
 	

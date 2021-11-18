@@ -5,7 +5,7 @@ import com.giof71.groovy.reproducer.RunnerType;
 
 import groovy.lang.GroovyClassLoader;
 
-public class SameClassLoaderOomBuilder implements RunnerBuilder {
+public class SameClassLoaderOomRunnerBuilder implements RunnerBuilder {
 	
 	private GroovyClassLoader classLoader = new GroovyClassLoader();
 
@@ -16,7 +16,7 @@ public class SameClassLoaderOomBuilder implements RunnerBuilder {
 
 	@Override
 	public Runnable build() {
-		return new SameClassLoaderOomScriptRunnerBuilder(classLoader);
+		return new SameClassLoaderOomScriptRunner(classLoader);
 	}
 
 }
