@@ -10,7 +10,8 @@ import com.giof71.groovy.reproducer.RunnerType;
 import com.giof71.groovy.reproducer.runnable.one.OneClassLoaderOneScriptRunnerBuilder;
 import com.giof71.groovy.reproducer.runnable.random.RandomScriptRunnerBuilder;
 import com.giof71.groovy.reproducer.runnable.randomcached.RandomCachedScriptRunnerBuilder;
-import com.giof71.groovy.reproducer.runnable.randomcachednested.RandomCachedNestedScriptRunnerBuilder;
+import com.giof71.groovy.reproducer.runnable.randomcachednested.leaking.RandomCachedNestedLeakingScriptRunnerBuilder;
+import com.giof71.groovy.reproducer.runnable.randomcachednested.sanitized.RandomCachedNestedSanitizedScriptRunnerBuilder;
 import com.giof71.groovy.reproducer.runnable.sameclassloaderoom.SameClassLoaderOomScriptRunnerBuilder;
 import com.giof71.groovy.reproducer.runnable.samerecompiled.SameRecompiledRunnerBuilder;
 
@@ -24,7 +25,8 @@ public class RunnerFactoryImpl implements RunnerFactory {
 		map.put(RunnerType.SAME_CLASSLOADER_OOM, new SameClassLoaderOomScriptRunnerBuilder());
 		map.put(RunnerType.ONE_CLASSLOADER, new OneClassLoaderOneScriptRunnerBuilder());
 		map.put(RunnerType.SAME_RECOMPILED, new SameRecompiledRunnerBuilder());
-		map.put(RunnerType.RANDOM_CACHED_NESTED, new RandomCachedNestedScriptRunnerBuilder());
+		map.put(RunnerType.RANDOM_CACHED_NESTED_LEAKING, new RandomCachedNestedLeakingScriptRunnerBuilder());
+		map.put(RunnerType.RANDOM_CACHED_NESTED_SANITIZED, new RandomCachedNestedSanitizedScriptRunnerBuilder());
 	}
 
 	@Override

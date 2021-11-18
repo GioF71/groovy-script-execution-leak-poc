@@ -1,5 +1,5 @@
 package com.giof71.groovy.reproducer.runnable.randomcachednested;
 
-interface DefaultScript {
+public interface DefaultScript {
 	void apply();
 }

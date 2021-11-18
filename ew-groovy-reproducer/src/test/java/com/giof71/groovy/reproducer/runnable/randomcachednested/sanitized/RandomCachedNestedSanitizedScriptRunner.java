@@ -1,14 +1,15 @@
-package com.giof71.groovy.reproducer.runnable.randomcachednested;
+package com.giof71.groovy.reproducer.runnable.randomcachednested.sanitized;
 
 import org.codehaus.groovy.runtime.InvokerHelper;
 
 import com.giof71.groovy.reproducer.runnable.ScriptCache;
 import com.giof71.groovy.reproducer.runnable.ScriptRandomizer;
+import com.giof71.groovy.reproducer.runnable.randomcachednested.DefaultScript;
 
 import groovy.lang.Binding;
 import groovy.lang.Script;
 
-public class RandomCachedNestedScriptRunner implements Runnable {
+public class RandomCachedNestedSanitizedScriptRunner implements Runnable {
 
 	private final ScriptRandomizer randomizer;
 	private final ScriptCache scriptCache;
@@ -32,18 +33,21 @@ public class RandomCachedNestedScriptRunner implements Runnable {
 		}
 	}
 	
-	public RandomCachedNestedScriptRunner(ScriptRandomizer randomizer, ScriptCache scriptCache) {
+	public RandomCachedNestedSanitizedScriptRunner(ScriptRandomizer randomizer, ScriptCache scriptCache) {
 		this.randomizer = randomizer;
 		this.scriptCache = scriptCache;
 	}
 	
 	@Override
 	public void run() {
+		// launch default script
+		Class<?> defaultScriptClass = scriptCache.getCompiled(defaultScriptText);
+		Script defaultScript = InvokerHelper.createScript(defaultScriptClass, new Binding());
+		defaultScript.run();
+		
+		// then run user script
 		Class<?> c = scriptCache.getCompiled(randomizer.get());
-		DefaultScript defaultScript = new LocalDefaultScript(scriptCache);
-		Binding binding = new Binding();
-		binding.setProperty(RunnerConstant.DEFAULT_SCRIPT.name(), defaultScript);
-		Script scriptClass = InvokerHelper.createScript(c, binding);
+		Script scriptClass = InvokerHelper.createScript(c, new Binding());
 		scriptClass.run();
 	}
 }
