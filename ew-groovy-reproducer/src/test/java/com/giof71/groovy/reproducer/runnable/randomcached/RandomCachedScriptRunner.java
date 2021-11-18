@@ -1,11 +1,14 @@
 package com.giof71.groovy.reproducer.runnable.randomcached;
 
+import org.codehaus.groovy.runtime.InvokerHelper;
+
 import com.giof71.groovy.reproducer.runnable.ScriptCache;
 import com.giof71.groovy.reproducer.runnable.ScriptRandomizer;
 
+import groovy.lang.Binding;
 import groovy.lang.Script;
 
-public class RandomCachedScriptRunner implements Runnable {
+class RandomCachedScriptRunner implements Runnable {
 
 	private final ScriptRandomizer randomizer;
 	private final ScriptCache scriptCache;
@@ -17,7 +20,9 @@ public class RandomCachedScriptRunner implements Runnable {
 	
 	@Override
 	public void run() {
-		Script s = scriptCache.getCompiled(randomizer.get());
-		s.run();
+		Class<?> c = scriptCache.getCompiled(randomizer.get());
+		Binding binding = new Binding();
+		Script scriptClass = InvokerHelper.createScript(c, binding);
+		scriptClass.run();
 	}
 }
